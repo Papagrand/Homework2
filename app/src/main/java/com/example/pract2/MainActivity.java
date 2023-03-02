@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mInfoTextView;
     static final String SOCCER_SCORE = "soccer_score";
     int mCurrentScore=1;
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         savedInstanceState.putInt(SOCCER_SCORE,mCurrentScore);

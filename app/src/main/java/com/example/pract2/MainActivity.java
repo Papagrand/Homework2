@@ -3,6 +3,7 @@ package com.example.pract2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -14,29 +15,28 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "Жизненный цикл";
     private TextView mInfoTextView;
     static final String SOCCER_SCORE = "soccer_score";
-    int mCurrentScore=1;
+    public static int mCurrentScore=0;
+    TextView ScoreText;
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         savedInstanceState.putInt(SOCCER_SCORE,mCurrentScore);
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mCurrentScore=savedInstanceState.getInt(SOCCER_SCORE);
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null){
             mCurrentScore=savedInstanceState.getInt(SOCCER_SCORE);
+        } else{
+            setContentView(R.layout.activity_main);
+            mInfoTextView = (TextView) findViewById(R.id.textViewInfo);
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "onCreate()");
         }
-        setContentView(R.layout.activity_main);
-        mInfoTextView = (TextView) findViewById(R.id.textViewInfo);
-        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "onCreate()");
+
     }
     @Override
     protected void onStart() {
@@ -44,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(), "onStart()", Toast.LENGTH_SHORT).show();
         Log.i(TAG, "onStart()");
+    }
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mCurrentScore=savedInstanceState.getInt(SOCCER_SCORE);
+        ScoreText = findViewById(R.id.ScoreTextView);
+        ScoreText.setText(String.valueOf(mCurrentScore));
     }
     @Override
     protected void onRestart() {
@@ -78,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
+        ScoreText = findViewById(R.id.ScoreTextView);
         switch (v.getId()) {
             case R.id.buttonTouchMe:
                 mInfoTextView.setText("Приложение уже было запущено!");
@@ -96,7 +102,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.buttonExit:
                 finish();
                 break;
-
+            case R.id.PlusScore:
+                mCurrentScore+=1;
+                ScoreText.setText(String.valueOf(mCurrentScore));
+                break;
+            case R.id.MinusScore:
+                mCurrentScore--;
+                ScoreText.setText(String.valueOf(mCurrentScore));
+                break;
             default:
                 break;
         }
